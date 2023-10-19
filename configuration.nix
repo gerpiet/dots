@@ -4,6 +4,10 @@
 
 { config, pkgs, ... }:
 
+let
+  unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
+  vscodestableunstable = import(fetchTarball "https://github.com/NixOS/nixpkgs/archive/566fa9693797efca2f6190843b49b77858fddf54.tar.gz") { config = config.nixpkgs.config; };
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -34,7 +38,7 @@
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "pie"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -59,21 +63,21 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  services.xserver = {
+    # X11 windowing system
+    enable = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+    # Keymap
+    layout = "be";
+    xkbVariant = "";
+
+    # GNOME
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
 
   # Enable flatpak
   services.flatpak.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "be";
-    xkbVariant = "";
-  };
 
   # Configure console keymap
   console.keyMap = "be-latin1";
@@ -112,7 +116,7 @@
     packages = with pkgs; [
       firefox
       signal-desktop
-      vscode
+      vscodestableunstable.vscode
       # Libreoffice
       libreoffice-still  # Stable version
       hunspell  # Hunspell dictionaries for language checking
@@ -122,11 +126,15 @@
       hunspellDicts.nl_NL
 
       timetrap
-      spotify
+      unstable.spotify
       sqlite
       git
       gh
       wireshark
+      jetbrains.phpstorm
+      unstable.jetbrains.pycharm-professional
+      inetutils
+      unstable.obsidian
     ];
   };
 
@@ -135,7 +143,6 @@
 
   services = {
     syncthing = {
-      settings = {
         enable = true;
         user = "pi";
         dataDir = "/home/pi/Documents";
@@ -157,9 +164,15 @@
               devices = [ "fairphone3" ];
           };
         };
-      };
     };
   };
+
+  environment.gnome.excludePackages = with pkgs; [
+    gnome-tour
+    xterm
+    gnome.gnome-maps
+    gnome.geary
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -169,6 +182,7 @@
     python3
     python310Packages.pip
     python310Packages.pytest
+    php
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
