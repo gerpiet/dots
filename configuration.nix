@@ -5,8 +5,12 @@
 { config, pkgs, ... }:
 
 let
-  unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
-  vscodestableunstable = import(fetchTarball "https://github.com/NixOS/nixpkgs/archive/566fa9693797efca2f6190843b49b77858fddf54.tar.gz") { config = config.nixpkgs.config; };
+  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+  my-python-packages = ps: with ps; [
+    pip
+    pytest
+    requests
+  ];
 in
 {
   imports =
@@ -18,10 +22,17 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  nixpkgs.config.packageOverrides = pkgs: rec {
-    wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
-      patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
-    });
+  # Allow unfree packages
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: rec {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+      wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
+        patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
+      });
+    };
   };
 
   # Setup keyfile
@@ -37,6 +48,8 @@ in
   boot.supportedFilesystems = [ "ntfs" ];
 
   hardware.cpu.intel.updateMicrocode = true;
+
+  hardware.keyboard.zsa.enable = true;
 
   networking.hostName = "pie"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -116,7 +129,7 @@ in
     packages = with pkgs; [
       firefox
       signal-desktop
-      vscodestableunstable.vscode
+      unstable.vscode
       # Libreoffice
       libreoffice-still  # Stable version
       hunspell  # Hunspell dictionaries for language checking
@@ -131,15 +144,16 @@ in
       git
       gh
       wireshark
-      jetbrains.phpstorm
       unstable.jetbrains.pycharm-professional
       inetutils
       unstable.obsidian
+      unstable.logseq
+      tor-browser-bundle-bin
+      unstable.jetbrains-toolbox
+      gnome.gnome-software
+      file
     ];
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   services = {
     syncthing = {
@@ -169,20 +183,21 @@ in
 
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
-    xterm
     gnome.gnome-maps
     gnome.geary
+  ];
+  services.xserver.excludePackages = with pkgs; [
+    xterm
   ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    gnome.gnome-software
-    nixos-option
-    python3
-    python310Packages.pip
-    python310Packages.pytest
+    (python3.withPackages my-python-packages)
     php
+    unstable.cargo
+    unstable.rustc
+    unstable.clang
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
