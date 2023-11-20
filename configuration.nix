@@ -5,11 +5,11 @@
 { config, pkgs, ... }:
 
 let
-  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
   my-python-packages = ps: with ps; [
     pip
     pytest
     requests
+    dnspython
   ];
 in
 {
@@ -20,20 +20,40 @@ in
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 50;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Allow unfree packages
+  system.autoUpgrade.enable = true;
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   nixpkgs.config = {
+    # Allow unfree packages
     allowUnfree = true;
+    # Patch for wpa_supplicant to make school WiFi work
     packageOverrides = pkgs: rec {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
       wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
         patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
   };
+
+  nixpkgs.overlays = [
+    # Add extra rule for the voyager keyboard
+    (final: prev: {
+      zsa-udev-rules = prev.zsa-udev-rules.overrideAttrs (old: {
+        installPhase = old.installPhase + ''
+
+          echo '# Keymapp Flashing rules for the Voyager' >> $out/lib/udev/rules.d/50-wally.rules
+          echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", TAG+="uaccess", SYMLINK+="ignition_dfu"' >> $out/lib/udev/rules.d/50-wally.rules
+        '';
+      });
+    })
+  ];
 
   # Setup keyfile
   boot.initrd.secrets = {
@@ -69,6 +89,7 @@ in
       setSocketVariable = true;
     };
   };
+
 
   # Set your time zone.
   time.timeZone = "Europe/Brussels";
@@ -129,7 +150,7 @@ in
     packages = with pkgs; [
       firefox
       signal-desktop
-      unstable.vscode
+      vscode
       # Libreoffice
       libreoffice-still  # Stable version
       hunspell  # Hunspell dictionaries for language checking
@@ -139,19 +160,19 @@ in
       hunspellDicts.nl_NL
 
       timetrap
-      unstable.spotify
+      spotify
       sqlite
       git
       gh
       wireshark
-      unstable.jetbrains.pycharm-professional
       inetutils
-      unstable.obsidian
-      unstable.logseq
+      obsidian
+      logseq
       tor-browser-bundle-bin
-      unstable.jetbrains-toolbox
+      jetbrains-toolbox
       gnome.gnome-software
       file
+      wally-cli
     ];
   };
 
@@ -163,19 +184,25 @@ in
         configDir = "/home/pi/Documents/.config/syncthing";
         overrideDevices = true;
         overrideFolders = true;
-        devices."fairphone3".id = "QSTMZE3-LQDGPEQ-XTZQGEM-XNV7PZR-FPUEUNB-VQ4FEBQ-645KUQG-PAMIDQJ";
-        folders = {
-          "obsidian-personal-vault" = {
-              path = "/home/pi/Documents/syncthing/obsidian-personal-vault";
+        settings = {
+          devices."fairphone3".id = "QSTMZE3-LQDGPEQ-XTZQGEM-XNV7PZR-FPUEUNB-VQ4FEBQ-645KUQG-PAMIDQJ";
+          folders = {
+            "obsidian-personal-vault" = {
+                path = "/home/pi/Documents/syncthing/obsidian-personal-vault";
+                devices = [ "fairphone3" ];
+            };
+            "life-photos" = {
+                path = "/home/pi/Documents/syncthing/life-photos";
+                devices = [ "fairphone3" ];
+            };
+            "birday-normal-export-format" = {
+                path = "/home/pi/Documents/syncthing/birday-normal-export-format";
+                devices = [ "fairphone3" ];
+            };
+            "keepass" = {
+              path = "/home/pi/Documents/syncthing/keepass";
               devices = [ "fairphone3" ];
-          };
-          "life-photos" = {
-              path = "/home/pi/Documents/syncthing/life-photos";
-              devices = [ "fairphone3" ];
-          };
-          "birday-normal-export-format" = {
-              path = "/home/pi/Documents/syncthing/birday-normal-export-format";
-              devices = [ "fairphone3" ];
+            };
           };
         };
     };
@@ -195,9 +222,9 @@ in
   environment.systemPackages = with pkgs; [
     (python3.withPackages my-python-packages)
     php
-    unstable.cargo
-    unstable.rustc
-    unstable.clang
+    cargo
+    rustc
+    clang
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
