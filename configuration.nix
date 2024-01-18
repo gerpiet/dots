@@ -10,6 +10,7 @@ let
     pytest
     requests
     dnspython
+    pygame
   ];
 in
 {
@@ -18,18 +19,26 @@ in
       ./hardware-configuration.nix
     ];
 
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 50;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  system.autoUpgrade.enable = true;
+  # Automatically upgrade and garbage collect.
+  system.autoUpgrade = {
+    enable = true;
+    operation = "boot";
+    dates = "15:00";
+  };
 
   nix.gc = {
     automatic = true;
-    dates = "weekly";
+    dates = "Mon 14:00";
     options = "--delete-older-than 30d";
   };
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   nixpkgs.config = {
     # Allow unfree packages
@@ -40,20 +49,12 @@ in
         patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
+    permittedInsecurePackages = [
+      "electron-25.9.0"
+    ];
   };
 
-  nixpkgs.overlays = [
-    # Add extra rule for the voyager keyboard
-    (final: prev: {
-      zsa-udev-rules = prev.zsa-udev-rules.overrideAttrs (old: {
-        installPhase = old.installPhase + ''
-
-          echo '# Keymapp Flashing rules for the Voyager' >> $out/lib/udev/rules.d/50-wally.rules
-          echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", TAG+="uaccess", SYMLINK+="ignition_dfu"' >> $out/lib/udev/rules.d/50-wally.rules
-        '';
-      });
-    })
-  ];
+  
 
   # Setup keyfile
   boot.initrd.secrets = {
@@ -173,6 +174,11 @@ in
       gnome.gnome-software
       file
       wally-cli
+      dig
+      keymapp
+      zsa-udev-rules
+      protonvpn-gui
+      spicetify-cli
     ];
   };
 
@@ -225,6 +231,7 @@ in
     cargo
     rustc
     clang
+    wireguard-tools
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
