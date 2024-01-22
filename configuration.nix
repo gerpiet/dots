@@ -49,6 +49,7 @@ in
         patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
+    # Temporary until obsidian etc. is fixed
     permittedInsecurePackages = [
       "electron-25.9.0"
     ];
@@ -179,6 +180,7 @@ in
       zsa-udev-rules
       protonvpn-gui
       spicetify-cli
+      impression
     ];
   };
 
