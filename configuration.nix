@@ -4,25 +4,15 @@
 
 { config, pkgs, ... }:
 
-let
-  my-python-packages = ps: with ps; [
-    pip
-    pytest
-    requests
-    dnspython
-    pygame
-  ];
-in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./syncthing.nix
     ];
-
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 50;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Automatically upgrade and garbage collect.
@@ -37,8 +27,6 @@ in
     dates = "Mon 14:00";
     options = "--delete-older-than 30d";
   };
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   nixpkgs.config = {
     # Allow unfree packages
@@ -55,17 +43,6 @@ in
     ];
   };
 
-  
-
-  # Setup keyfile
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = null;
-  };
-
-  # Enable swap on luks
-  boot.initrd.luks.devices."luks-fc61ff11-73b2-4adc-9e7a-b5cc2ff906f4".device = "/dev/disk/by-uuid/fc61ff11-73b2-4adc-9e7a-b5cc2ff906f4";
-  boot.initrd.luks.devices."luks-fc61ff11-73b2-4adc-9e7a-b5cc2ff906f4".keyFile = "/crypto_keyfile.bin";
-
   # NTFS support
   boot.supportedFilesystems = [ "ntfs" ];
 
@@ -73,8 +50,10 @@ in
 
   hardware.keyboard.zsa.enable = true;
 
+  boot.initrd.luks.devices."luks-c4865783-788f-40a1-929a-56f06233bfef".device = "/dev/disk/by-uuid/c4865783-788f-40a1-929a-56f06233bfef";
   networking.hostName = "pie"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # ^^^ Enabled by Gnome ^^^
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -83,7 +62,7 @@ in
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Docker
+  # Rootless docker
   virtualisation.docker = {
     enable = true;
     rootless = {
@@ -92,27 +71,25 @@ in
     };
   };
 
-
   # Set your time zone.
   time.timeZone = "Europe/Brussels";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  services.xserver = {
-    # X11 windowing system
-    enable = true;
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
 
-    # Keymap
+  # Enable the GNOME Desktop Environment.
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
     layout = "be";
-    xkbVariant = "";
-
-    # GNOME
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
+    variant = "";
   };
 
-  # Enable flatpak
   services.flatpak.enable = true;
 
   # Configure console keymap
@@ -138,82 +115,51 @@ in
     #media-session.enable = true;
   };
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Enable touchpad support (enabled default in most desktopManager).
+  # Already enabled by Gnome
   # services.xserver.libinput.enable = true;
 
   programs.wireshark.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pi = {
     isNormalUser = true;
     description = "pi";
     extraGroups = [ "networkmanager" "wheel" "wireshark" ];
-
     packages = with pkgs; [
+      discord
       firefox
-      signal-desktop
-      vscode
-      # Libreoffice
-      libreoffice-still  # Stable version
-      hunspell  # Hunspell dictionaries for language checking
+      file
+      gh
+      git
+      gnome.gnome-software
+
+      hunspell
       hunspellDicts.en_GB-large
       hunspellDicts.en_US
       hunspellDicts.fr-moderne
       hunspellDicts.nl_NL
 
-      timetrap
-      spotify
-      sqlite
-      git
-      gh
-      wireshark
       inetutils
-      obsidian
-      logseq
-      tor-browser-bundle-bin
-      jetbrains-toolbox
-      gnome.gnome-software
-      file
-      wally-cli
-      dig
-      keymapp
-      zsa-udev-rules
-      protonvpn-gui
-      spicetify-cli
       impression
+      jetbrains-toolbox
+      keymapp
+      libreoffice-still  # Stable version
+      logseq
+      obsidian
+      protonvpn-gui
+      signal-desktop
+      spicetify-cli
+      spotify
+      tor-browser-bundle-bin
+      vscode
+      wireshark
+      zsa-udev-rules
+      # Temporary workaround because Spotify doesn't work on X
+      # (writeShellScriptBin "spotify" ''exec ${spotify}/bin/spotify --enable-features=UseOzonePlatform --ozone-platform=wayland'')
+      # ^^^Deleting the cache directory for Spotify fixed it^^^
     ];
-  };
-
-  services = {
-    syncthing = {
-        enable = true;
-        user = "pi";
-        dataDir = "/home/pi/Documents";
-        configDir = "/home/pi/Documents/.config/syncthing";
-        overrideDevices = true;
-        overrideFolders = true;
-        settings = {
-          devices."fairphone3".id = "QSTMZE3-LQDGPEQ-XTZQGEM-XNV7PZR-FPUEUNB-VQ4FEBQ-645KUQG-PAMIDQJ";
-          folders = {
-            "obsidian-personal-vault" = {
-                path = "/home/pi/Documents/syncthing/obsidian-personal-vault";
-                devices = [ "fairphone3" ];
-            };
-            "life-photos" = {
-                path = "/home/pi/Documents/syncthing/life-photos";
-                devices = [ "fairphone3" ];
-            };
-            "birday-normal-export-format" = {
-                path = "/home/pi/Documents/syncthing/birday-normal-export-format";
-                devices = [ "fairphone3" ];
-            };
-            "keepass" = {
-              path = "/home/pi/Documents/syncthing/keepass";
-              devices = [ "fairphone3" ];
-            };
-          };
-        };
-    };
   };
 
   environment.gnome.excludePackages = with pkgs; [
@@ -221,6 +167,7 @@ in
     gnome.gnome-maps
     gnome.geary
   ];
+
   services.xserver.excludePackages = with pkgs; [
     xterm
   ];
@@ -228,12 +175,16 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    (python3.withPackages my-python-packages)
     php
     cargo
+    clippy
     rustc
+    rust-analyzer
     clang
     wireguard-tools
+    R
+    rstudio
+    rustfmt
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -261,6 +212,6 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 
 }
