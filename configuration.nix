@@ -2,13 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, inputs, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./syncthing.nix
     ];
 
   # Bootloader.
@@ -19,6 +18,12 @@
   system.autoUpgrade = {
     enable = true;
     operation = "boot";
+    flake = inputs.self.outPath;
+    flags = [
+      "--update-input"
+      "nixpkgs"
+      "-L"  # print build logs
+    ];
     dates = "15:00";
   };
 
@@ -127,6 +132,7 @@
     isNormalUser = true;
     description = "pi";
     extraGroups = [ "networkmanager" "wheel" "wireshark" ];
+    shell = pkgs.bash;
     packages = with pkgs; [
       discord
       firefox
@@ -166,6 +172,7 @@
     gnome-tour
     gnome.gnome-maps
     gnome.geary
+    epiphany
   ];
 
   services.xserver.excludePackages = with pkgs; [

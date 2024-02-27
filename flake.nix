@@ -16,6 +16,8 @@
           specialArgs = {inherit inputs;};
           modules = [ 
             ./configuration.nix
+            ./syncthing.nix
+            ./sh.nix
           ];
         };
       };
