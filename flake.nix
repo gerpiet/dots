@@ -16,8 +16,12 @@
           specialArgs = {inherit inputs;};
           modules = [ 
             ./configuration.nix
-            ./syncthing.nix
+            ./docker.nix
+            ./flatpak.nix
             ./sh.nix
+            ./syncthing.nix
+            ./vikunja.nix
+            ./vmtest.nix
           ];
         };
       };

@@ -67,15 +67,6 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Rootless docker
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
-
   # Set your time zone.
   time.timeZone = "Europe/Brussels";
 
@@ -94,8 +85,6 @@
     layout = "be";
     variant = "";
   };
-
-  services.flatpak.enable = true;
 
   # Configure console keymap
   console.keyMap = "be-latin1";
@@ -133,6 +122,7 @@
     description = "pi";
     extraGroups = [ "networkmanager" "wheel" "wireshark" ];
     shell = pkgs.bash;
+    initialPassword = "pi";
     packages = with pkgs; [
       discord
       firefox
@@ -159,6 +149,7 @@
       spicetify-cli
       spotify
       tor-browser-bundle-bin
+      typst
       vscode
       wireshark
       zsa-udev-rules
