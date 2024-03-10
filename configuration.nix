@@ -143,6 +143,7 @@
       keymapp
       libreoffice-still  # Stable version
       logseq
+      mission-center
       obsidian
       protonvpn-gui
       signal-desktop
@@ -160,10 +161,11 @@
   };
 
   environment.gnome.excludePackages = with pkgs; [
-    gnome-tour
-    gnome.gnome-maps
-    gnome.geary
     epiphany
+    gnome-tour
+    gnome.geary
+    gnome.gnome-maps
+    gnome.gnome-system-monitor
   ];
 
   services.xserver.excludePackages = with pkgs; [
