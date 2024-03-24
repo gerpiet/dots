@@ -124,11 +124,13 @@
     shell = pkgs.bash;
     initialPassword = "pi";
     packages = with pkgs; [
+      bitwarden-desktop
       discord
       firefox
       file
       gh
       git
+      gnome.dconf-editor
       gnome.gnome-software
 
       hunspell
