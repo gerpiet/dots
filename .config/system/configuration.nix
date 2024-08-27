@@ -36,20 +36,19 @@
   nixpkgs.config = {
     # Allow unfree packages
     allowUnfree = true;
+    permittedInsecurePackages = [
+      "electron-27.3.11"  
+    ];
     # Patch for wpa_supplicant to make school WiFi work
     packageOverrides = pkgs: rec {
       wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
         patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
-    # Temporary until obsidian etc. is fixed
-    permittedInsecurePackages = [
-      "electron-25.9.0"
-    ];
   };
 
   # NTFS support
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot.supportedFilesystems = { ntfs = true; };
 
   hardware.cpu.intel.updateMicrocode = true;
 
@@ -93,7 +92,6 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -117,21 +115,29 @@
 
   programs.wireshark.enable = true;
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "pi" ];
+
   users.users.pi = {
     isNormalUser = true;
     description = "pi";
     extraGroups = [ "networkmanager" "wheel" "wireshark" ];
     shell = pkgs.bash;
     initialPassword = "pi";
-    packages = with pkgs; [
+    packages = (with pkgs; [
       bitwarden-desktop
       discord
-      firefox
+      #dconf-editor
       file
+      firefox
+      fractal
       gh
       git
-      gnome.dconf-editor
-      gnome.gnome-software
+      gnome-boxes
+      gnome-secrets
+      gnome-software
 
       hunspell
       hunspellDicts.en_GB-large
@@ -142,33 +148,41 @@
       inetutils
       impression
       jetbrains-toolbox
+      jetbrains.clion
       keymapp
       libreoffice-still  # Stable version
+      librespot
       logseq
       mission-center
       obsidian
+      papers
+      protonmail-desktop
       protonvpn-gui
       signal-desktop
       spicetify-cli
       spotify
+      spotify-cli-linux
+      texliveFull
       tor-browser-bundle-bin
       typst
       vscode
       wireshark
+      zed-editor
       zsa-udev-rules
       # Temporary workaround because Spotify doesn't work on X
       # (writeShellScriptBin "spotify" ''exec ${spotify}/bin/spotify --enable-features=UseOzonePlatform --ozone-platform=wayland'')
       # ^^^Deleting the cache directory for Spotify fixed it^^^
+    ]) ++ [
+      inputs.firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin
+      inputs.zen-browser.packages.${pkgs.system}.specific
     ];
   };
 
-  environment.gnome.excludePackages = with pkgs; [
+  environment.gnome.excludePackages = (with pkgs; [
     epiphany
     gnome-tour
-    gnome.geary
-    gnome.gnome-maps
-    gnome.gnome-system-monitor
-  ];
+    gnome-maps
+  ]);
 
   services.xserver.excludePackages = with pkgs; [
     xterm
@@ -177,19 +191,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    gdb
     lua
     love
-    php
-    cargo
-    clippy
-    rustc
-    rust-analyzer
-    clang
-    wireguard-tools
     R
     rstudio
-    rustfmt
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

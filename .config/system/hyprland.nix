@@ -6,8 +6,9 @@
 
   users.users.pi.packages = with pkgs; [
     dunst
-    waybar
-    tofi
     libnotify
+    playerctl
+    tofi
+    waybar
   ];
 }
