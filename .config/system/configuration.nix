@@ -14,19 +14,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Automatically upgrade and garbage collect.
-  system.autoUpgrade = {
-    enable = true;
-    operation = "boot";
-    flake = inputs.self.outPath;
-    flags = [
-      "--update-input"
-      "nixpkgs"
-      "-L"  # print build logs
-    ];
-    dates = "15:00";
-  };
-
+  # Collect garbage every monday noon
   nix.gc = {
     automatic = true;
     dates = "Mon 14:00";
@@ -36,15 +24,17 @@
   nixpkgs.config = {
     # Allow unfree packages
     allowUnfree = true;
-    permittedInsecurePackages = [
-      "electron-27.3.11"  
-    ];
+
     # Patch for wpa_supplicant to make school WiFi work
     packageOverrides = pkgs: rec {
       wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
         patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
+
+    permittedInsecurePackages = [
+      "electron-27.3.11"
+    ];
   };
 
   # NTFS support
@@ -129,8 +119,7 @@
     packages = (with pkgs; [
       bitwarden-desktop
       discord
-      #dconf-editor
-      file
+      dconf-editor
       firefox
       fractal
       gh
@@ -145,10 +134,10 @@
       hunspellDicts.fr-moderne
       hunspellDicts.nl_NL
 
-      inetutils
       impression
       jetbrains-toolbox
       jetbrains.clion
+      jetbrains.pycharm-professional
       keymapp
       libreoffice-still  # Stable version
       librespot
@@ -162,16 +151,13 @@
       spicetify-cli
       spotify
       spotify-cli-linux
-      texliveFull
+      tmux
       tor-browser-bundle-bin
       typst
       vscode
       wireshark
       zed-editor
       zsa-udev-rules
-      # Temporary workaround because Spotify doesn't work on X
-      # (writeShellScriptBin "spotify" ''exec ${spotify}/bin/spotify --enable-features=UseOzonePlatform --ozone-platform=wayland'')
-      # ^^^Deleting the cache directory for Spotify fixed it^^^
     ]) ++ [
       inputs.firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin
       inputs.zen-browser.packages.${pkgs.system}.specific
@@ -180,6 +166,7 @@
 
   environment.gnome.excludePackages = (with pkgs; [
     epiphany
+    geary
     gnome-tour
     gnome-maps
   ]);
@@ -191,10 +178,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    lua
-    love
-    R
-    rstudio
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
