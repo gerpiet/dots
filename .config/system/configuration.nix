@@ -138,6 +138,7 @@
       jetbrains-toolbox
       jetbrains.clion
       jetbrains.pycharm-professional
+      jetbrains.webstorm
       keymapp
       libreoffice-still  # Stable version
       librespot
