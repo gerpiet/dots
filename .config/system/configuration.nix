@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   imports =
@@ -154,6 +154,9 @@
       wireshark
       zed-editor
       zsa-udev-rules
+
+      # Programming
+      nixd
     ]) ++ [
       inputs.zen-browser.packages."${pkgs.system}".default
     ];
