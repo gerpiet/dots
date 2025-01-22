@@ -44,7 +44,7 @@
 
   hardware.keyboard.zsa.enable = true;
 
-  boot.initrd.luks.devices."luks-c4865783-788f-40a1-929a-56f06233bfef".device = "/dev/disk/by-uuid/c4865783-788f-40a1-929a-56f06233bfef";
+  boot.initrd.luks.devices."luks-4528c4e5-31eb-48d7-9eff-e4cb56c31799".device = "/dev/disk/by-uuid/4528c4e5-31eb-48d7-9eff-e4cb56c31799";
   networking.hostName = "pie"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # ^^^ Enabled by Gnome ^^^
@@ -82,7 +82,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -104,11 +104,9 @@
   # services.xserver.libinput.enable = true;
 
   programs.wireshark.enable = true;
+  programs.java.enable = true;
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "pi" ];
 
   users.users.pi = {
     isNormalUser = true;
@@ -141,17 +139,14 @@
       jetbrains.webstorm
       keymapp
       libreoffice-still  # Stable version
-      librespot
       logseq
       mission-center
       obsidian
-      papers
-      protonmail-desktop
+      papers # New Gnome PDF viewer
       protonvpn-gui
       signal-desktop
-      spicetify-cli
       spotify
-      spotify-cli-linux
+      timewarrior
       tmux
       tor-browser-bundle-bin
       typst
@@ -160,8 +155,7 @@
       zed-editor
       zsa-udev-rules
     ]) ++ [
-      inputs.firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin
-      inputs.zen-browser.packages.${pkgs.system}.specific
+      inputs.zen-browser.packages."${pkgs.system}".default
     ];
   };
 
