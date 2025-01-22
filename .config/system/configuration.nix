@@ -10,6 +10,20 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Automatically upgrade and garbage collect.
+  system.autoUpgrade = {
+    enable = true;
+    operation = "boot";
+    flake = inputs.self.outPath;
+    flags = [
+      "--update-input"
+      "nixpkgs"
+      "--commit-lock-file"
+      "-L"  # print build logs
+    ];
+    persistent = true;
+  };
+
   # Collect garbage every monday noon
   nix.gc = {
     automatic = true;
