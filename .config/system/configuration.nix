@@ -1,10 +1,9 @@
 { inputs, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -19,7 +18,7 @@
       "--update-input"
       "nixpkgs"
       "--commit-lock-file"
-      "-L"  # print build logs
+      "-L" # print build logs
     ];
     persistent = true;
   };
@@ -38,13 +37,12 @@
     # Patch for wpa_supplicant to make school WiFi work
     packageOverrides = pkgs: rec {
       wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
-        patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
+        patches = attrs.patches
+          ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
 
-    permittedInsecurePackages = [
-      "electron-27.3.11"
-    ];
+    permittedInsecurePackages = [ "electron-27.3.11" ];
   };
 
   # NTFS support
@@ -54,7 +52,8 @@
 
   hardware.keyboard.zsa.enable = true;
 
-  boot.initrd.luks.devices."luks-4528c4e5-31eb-48d7-9eff-e4cb56c31799".device = "/dev/disk/by-uuid/4528c4e5-31eb-48d7-9eff-e4cb56c31799";
+  boot.initrd.luks.devices."luks-4528c4e5-31eb-48d7-9eff-e4cb56c31799".device =
+    "/dev/disk/by-uuid/4528c4e5-31eb-48d7-9eff-e4cb56c31799";
   networking.hostName = "pie"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # ^^^ Enabled by Gnome ^^^
@@ -138,7 +137,7 @@
       jetbrains.pycharm-professional
       jetbrains.webstorm
       keymapp
-      libreoffice-still  # Stable version
+      libreoffice-still # Stable version
       logseq
       mission-center
       obsidian
@@ -157,21 +156,14 @@
 
       # Programming
       nixd
-    ]) ++ [
-      inputs.zen-browser.packages."${pkgs.system}".default
-    ];
+      nixfmt-classic
+    ]) ++ [ inputs.zen-browser.packages."${pkgs.system}".default ];
   };
 
-  environment.gnome.excludePackages = (with pkgs; [
-    epiphany
-    geary
-    gnome-tour
-    gnome-maps
-  ]);
+  environment.gnome.excludePackages =
+    (with pkgs; [ epiphany geary gnome-tour gnome-maps ]);
 
-  services.xserver.excludePackages = with pkgs; [
-    xterm
-  ];
+  services.xserver.excludePackages = with pkgs; [ xterm ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
