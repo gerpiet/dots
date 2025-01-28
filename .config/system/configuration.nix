@@ -141,6 +141,7 @@
       zsa-udev-rules
 
       # Programming
+      clang-tools
       nixd
       nixfmt-classic
     ]) ++ [ inputs.zen-browser.packages."${pkgs.system}".default ];
