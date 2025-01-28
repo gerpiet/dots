@@ -144,6 +144,7 @@
       clang-tools
       nixd
       nixfmt-classic
+      rust-analyzer
     ]) ++ [ inputs.zen-browser.packages."${pkgs.system}".default ];
   };
 
