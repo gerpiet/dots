@@ -1,20 +1,43 @@
-{ inputs, pkgs, ... }:
+/**
+  * General/main configuration
+*/
+
+{ ... }:
 
 {
-  imports = [ # Include the results of the hardware scan.
+  imports = [
+    # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Boot and hardware
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
 
-  # Collect garbage every month noon
+    initrd.luks.devices."luks-4528c4e5-31eb-48d7-9eff-e4cb56c31799".device =
+      "/dev/disk/by-uuid/4528c4e5-31eb-48d7-9eff-e4cb56c31799";
+
+    # NTFS support
+    supportedFilesystems.ntfs = true;
+  };
+
+  hardware = {
+    cpu.intel.updateMicrocode = true;
+    keyboard.zsa.enable = true;
+  };
+
+  # Nix and Nixpkgs
   nix.gc = {
     automatic = true;
     dates = "monthly";
     options = "--delete-older-than 30d";
   };
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   nixpkgs.config = {
     # Allow unfree packages
@@ -23,135 +46,69 @@
     # Patch for wpa_supplicant to make school WiFi work
     packageOverrides = pkgs: rec {
       wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
-        patches = attrs.patches
-          ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
+        patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
 
     permittedInsecurePackages = [ "electron-27.3.11" ];
   };
 
-  # NTFS support
-  boot.supportedFilesystems = { ntfs = true; };
+  # General configuration
+  networking.hostName = "pie";
 
-  hardware.cpu.intel.updateMicrocode = true;
-
-  hardware.keyboard.zsa.enable = true;
-
-  boot.initrd.luks.devices."luks-4528c4e5-31eb-48d7-9eff-e4cb56c31799".device =
-    "/dev/disk/by-uuid/4528c4e5-31eb-48d7-9eff-e4cb56c31799";
-  networking.hostName = "pie"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # ^^^ Enabled by Gnome ^^^
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
   time.timeZone = "Europe/Brussels";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  services = {
+    # Desktop environment  and input
+    xserver = {
+      enable = false;
 
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+      # Enable the GNOME Desktop Environment.
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "be";
-    variant = "";
+      # Configure keymap in X11
+      xkb = {
+        layout = "be";
+        variant = "";
+      };
+    };
+
+    printing.enable = true;
+
+    # Enable sound with pipewire.
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      pulse.enable = true;
+    };
+
+    openssh.enable = true;
   };
+
+  security.rtkit.enable = true;
 
   # Configure console keymap
   console.keyMap = "be-latin1";
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
+  programs = {
+    wireshark.enable = true;
   };
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # Already enabled by Gnome
-  # services.xserver.libinput.enable = true;
-
-  programs.wireshark.enable = true;
-  programs.java.enable = true;
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   users.users.pi = {
     isNormalUser = true;
     description = "pi";
-    extraGroups = [ "networkmanager" "wheel" "wireshark" ];
-    shell = pkgs.bash;
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "wireshark"
+    ];
     initialPassword = "pi";
-    packages = (with pkgs; [
-      bitwarden-desktop
-      discord
-      dconf-editor
-      firefox
-      fractal
-      gh
-      git
-      gnome-boxes
-      gnome-secrets
-      gnome-software
-
-      hunspell
-      hunspellDicts.en_GB-large
-      hunspellDicts.en_US
-      hunspellDicts.fr-moderne
-      hunspellDicts.nl_NL
-
-      impression
-      jetbrains-toolbox
-      jetbrains.clion
-      jetbrains.pycharm-professional
-      jetbrains.webstorm
-      keymapp
-      libreoffice-still # Stable version
-      logseq
-      mission-center
-      obsidian
-      papers # New Gnome PDF viewer
-      protonvpn-gui
-      signal-desktop
-      spotify
-      timewarrior
-      tmux
-      tor-browser-bundle-bin
-      typst
-      vscode
-      wireshark
-      zed-editor
-      zsa-udev-rules
-
-      # Programming
-      clang-tools
-      nixd
-      nixfmt-classic
-      rust-analyzer
-    ]) ++ [ inputs.zen-browser.packages."${pkgs.system}".default ];
   };
-
-  environment.gnome.excludePackages =
-    (with pkgs; [ epiphany geary gnome-tour gnome-maps ]);
-
-  services.xserver.excludePackages = with pkgs; [ xterm ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

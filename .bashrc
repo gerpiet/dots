@@ -1,1 +1,1 @@
-alias dots='git --git-dir=/home/pi/.cfg/ --work-tree=/home/pi'
+export TIMEWARRIORDB=/home/pi/Documents/master-1/sem-2/timewarrior

@@ -1,32 +1,38 @@
-{ lib, config, pkgs, ... }:
+/**
+  * Syncthing configuration
+*/
+
+{ ... }:
+
 {
-    services.syncthing = {
-        enable = true;
-        user = "pi";
-        dataDir = "/home/pi/Documents";
-        configDir = "/home/pi/Documents/.config/syncthing";
-        overrideDevices = true;
-        overrideFolders = true;
-        settings = {
-          devices."fairphone3".id = "QSTMZE3-LQDGPEQ-XTZQGEM-XNV7PZR-FPUEUNB-VQ4FEBQ-645KUQG-PAMIDQJ";
-          folders = {
-            "obsidian-personal-vault" = {
-                path = "/home/pi/Documents/syncthing/obsidian-personal-vault";
-                devices = [ "fairphone3" ];
-            };
-            "life-photos" = {
-                path = "/home/pi/Documents/syncthing/life-photos";
-                devices = [ "fairphone3" ];
-            };
-            "birday-normal-export-format" = {
-                path = "/home/pi/Documents/syncthing/birday-normal-export-format";
-                devices = [ "fairphone3" ];
-            };
-            "keepass" = {
-              path = "/home/pi/Documents/syncthing/keepass";
-              devices = [ "fairphone3" ];
-            };
-          };
+  systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
+  services.syncthing = {
+    enable = true;
+    user = "pi";
+    dataDir = "/home/pi/Documents";
+    configDir = "/home/pi/.config/syncthing";
+    overrideFolders = true;
+    overrideDevices = true;
+    settings = {
+      devices."FP3".id = "RIS5ISR-MNPWDSD-HDJCKKM-B6N5PHA-MFM3DF5-DHO7E2T-OMLUK65-4DME3AT";
+      folders = {
+        "obsidian-personal-vault" = {
+          path = "/home/pi/Documents/syncthing/obsidian-personal-vault";
+          devices = [ "FP3" ];
         };
+        "life-photos" = {
+          path = "/home/pi/Documents/syncthing/life-photos";
+          devices = [ "FP3" ];
+        };
+        "app-backup" = {
+          path = "/home/pi/Documents/syncthing/app-backup";
+          devices = [ "FP3" ];
+        };
+        "keepass" = {
+          path = "/home/pi/Documents/syncthing/keepass";
+          devices = [ "FP3" ];
+        };
+      };
     };
-} 
+  };
+}
