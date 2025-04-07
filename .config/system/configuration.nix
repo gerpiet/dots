@@ -44,7 +44,7 @@
     allowUnfree = true;
 
     # Patch for wpa_supplicant to make school WiFi work
-    packageOverrides = pkgs: rec {
+    packageOverrides = pkgs: {
       wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
         patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
