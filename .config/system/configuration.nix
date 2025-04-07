@@ -76,6 +76,8 @@
       };
     };
 
+    gnome.gnome-remote-desktop.enable = false; # Default false, but enabled by Gnome
+
     printing.enable = true;
 
     # Enable sound with pipewire.

@@ -13,7 +13,7 @@
     (with pkgs; [
       bitwarden-desktop
       chromium
-      dconf-editor
+      decibels # Instead of gnome-music
       discord
       file
       firefox
@@ -37,7 +37,7 @@
       libreoffice-still # Stable version
       mission-center # Instead of gnome-system-monitor
       obsidian
-      papers # New Gnome PDF viewer
+      papers # Instead of evince
       pika-backup
       protonvpn-gui
       signal-desktop
@@ -62,12 +62,17 @@
     with pkgs;
     [
       epiphany
+      evince # Replaced by Papers
       geary
       gnome-connections
+      gnome-contacts
+      gnome-music # Replaced by decibels
       gnome-remote-desktop
-      gnome-system-monitor
+      gnome-system-monitor # Replaced by mission-center
       gnome-tour
       gnome-maps
+      simple-scan
+      yelp
     ]
   );
 
