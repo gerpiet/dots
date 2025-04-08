@@ -49,8 +49,6 @@
         patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
       });
     };
-
-    permittedInsecurePackages = [ "electron-27.3.11" ];
   };
 
   # General configuration
