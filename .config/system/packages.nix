@@ -45,12 +45,15 @@
       timewarrior
       tmux
       tor-browser-bundle-bin
-      vscode
       wireshark
-      zed-editor
       zsa-udev-rules
 
-      # Programming
+      # Editors
+      package-version-server # Needed for Zed
+      vscode
+      zed-editor
+
+      # Programming language tools
       clang-tools
       nixd
       nixfmt-rfc-style
