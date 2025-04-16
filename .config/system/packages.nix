@@ -11,10 +11,16 @@
 {
   users.users.pi.packages =
     (with pkgs; [
+      # Proprietary
+      discord
+      keymapp
+      obsidian
+      spotify
+
+      # Open source
       bitwarden-desktop
       chromium
       decibels # Instead of gnome-music
-      discord
       file
       firefox
       fractal
@@ -33,15 +39,12 @@
 
       imhex
       impression
-      keymapp
       libreoffice-still # Stable version
       mission-center # Instead of gnome-system-monitor
-      obsidian
       papers # Instead of evince
       pika-backup
       protonvpn-gui
       signal-desktop
-      spotify
       timewarrior
       tmux
       tor-browser-bundle-bin
@@ -57,6 +60,11 @@
       clang-tools
       nixd
       nixfmt-rfc-style
+      (python312.withPackages (
+        python-pkgs: with python-pkgs; [
+          python-lsp-server
+        ]
+      ))
       rust-analyzer
     ])
     ++ [ inputs.zen-browser.packages."${pkgs.system}".default ];
