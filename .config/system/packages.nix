@@ -80,7 +80,6 @@
       gnome-font-viewer
       gnome-logs
       gnome-music # Replaced by decibels
-      gnome-remote-desktop
       gnome-system-monitor # Replaced by mission-center
       gnome-tour
       gnome-maps
