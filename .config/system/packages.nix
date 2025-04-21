@@ -44,6 +44,7 @@
       papers # Instead of evince
       pika-backup
       protonvpn-gui
+      shortwave
       signal-desktop
       timewarrior
       tmux
