@@ -73,16 +73,19 @@
     with pkgs;
     [
       epiphany
-      evince # Replaced by Papers
+      evince # Replaced by papers
       geary
       gnome-connections
       gnome-contacts
+      gnome-font-viewer
+      gnome-logs
       gnome-music # Replaced by decibels
       gnome-remote-desktop
       gnome-system-monitor # Replaced by mission-center
       gnome-tour
       gnome-maps
       simple-scan
+      snapshot
       yelp
     ]
   );
