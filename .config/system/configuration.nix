@@ -59,20 +59,13 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   services = {
-    # Plasma6 because Gnome/COSMIC and VMWare are unbootable together. See https://github.com/NixOS/nixpkgs/issues/398956
-    displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-    };
-    desktopManager.plasma6.enable = true;
-
     # Desktop environment  and input
     xserver = {
       enable = false;
 
       # Enable the GNOME Desktop Environment.
-      # displayManager.gdm.enable = true;
-      # desktopManager.gnome.enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
 
       # Configure keymap in X11
       xkb = {

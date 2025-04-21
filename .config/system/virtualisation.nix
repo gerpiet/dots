@@ -18,7 +18,4 @@
     enable = true;
     setSocketVariable = true;
   };
-
-  # VMware: stupidly simple
-  virtualisation.vmware.host.enable = true;
 }
