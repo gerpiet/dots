@@ -104,8 +104,6 @@
     wireshark.enable = true;
   };
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
   users.users.pi = {
     isNormalUser = true;
     description = "pi";
