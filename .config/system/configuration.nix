@@ -33,17 +33,8 @@
     "flakes"
   ];
 
-  nixpkgs.config = {
-    # Allow unfree packages
-    allowUnfree = true;
-
-    # Patch for wpa_supplicant to make school WiFi work
-    packageOverrides = pkgs: {
-      wpa_supplicant = pkgs.wpa_supplicant.overrideAttrs (attrs: {
-        patches = attrs.patches ++ [ ./patches/wpa_supplicant/legacy-wifi.patch ];
-      });
-    };
-  };
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
   # General configuration
   networking.hostName = "pie";
