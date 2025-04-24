@@ -12,8 +12,8 @@
   nixpkgs.overlays = [
     (final: _prev: {
       protonvpn_working = import (builtins.fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/9537bd50fb933cdc6118859a9d2e2e85e8efa4db.tar.gz";
-        sha256 = "sha256:05agfq1fjvdsv1zrjhq22shby9ld12qgf34l4qv5zp1m7v4xmcqi";
+        url = "https://github.com/NixOS/nixpkgs/archive/ba29026f127183f946147a70eeb7bd79fec207da.tar.gz";
+        sha256 = "sha256:09abiacyf1ar0c9q6cvmks9kp6vmwzd5bppxzyw0mr8h4qsh26ia";
       }) { inherit (final) system; };
     })
   ];
