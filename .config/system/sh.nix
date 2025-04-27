@@ -5,7 +5,7 @@
 { pkgs, ... }:
 
 let
-  myAliases = {
+  aliases = {
     ".." = "cd ..";
     "dots" = "git --git-dir=/home/pi/.cfg/ --work-tree=/home/pi";
     "nix-unfree-develop" = "export NIXPKGS_ALLOW_UNFREE=1 && nix develop --impure";
@@ -21,7 +21,7 @@ in
 {
   users.users.pi.shell = pkgs.bash;
   programs.bash = {
-    shellAliases = myAliases;
+    shellAliases = aliases;
   };
   environment.variables = {
     # XDG Base Directory specification
