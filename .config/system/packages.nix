@@ -9,15 +9,6 @@
 }:
 
 {
-  nixpkgs.overlays = [
-    (final: _prev: {
-      protonvpn_working = import (builtins.fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/ba29026f127183f946147a70eeb7bd79fec207da.tar.gz";
-        sha256 = "sha256:09abiacyf1ar0c9q6cvmks9kp6vmwzd5bppxzyw0mr8h4qsh26ia";
-      }) { inherit (final) system; };
-    })
-  ];
-
   users.users.pi.packages =
     (with pkgs; [
       # Proprietary
@@ -52,7 +43,7 @@
       mission-center # Instead of gnome-system-monitor
       papers # Instead of evince
       pika-backup
-      protonvpn_working.protonvpn-gui
+      protonvpn-gui
       shortwave
       signal-desktop
       timewarrior
