@@ -12,10 +12,4 @@
       cores = 4;
     };
   };
-
-  # Rootless docker
-  virtualisation.docker.rootless = {
-    enable = true;
-    setSocketVariable = true;
-  };
 }
