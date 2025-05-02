@@ -1,0 +1,16 @@
+[Desktop Entry]
+# The type as listed above
+Type=Application
+
+# The version of the desktop entry specification to which this file complies
+Version=1.0
+
+# The name of the application
+Name=Obsidian Personal Vault
+
+Comment=Open Personal Vault in Obsidian
+Exec=xdg-open "obsidian://open?vault=obsidian-personal-vault"
+
+Icon=obsidian
+
+X-Desktop-File-Install-Version=0.28

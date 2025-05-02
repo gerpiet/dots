@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Obsidian Organize Vault
+Comment=Open Organize Vault in Obsidian
+Exec=xdg-open "obsidian://open?vault=organize"
+Icon=obsidian
+X-Desktop-File-Install-Version=0.28
