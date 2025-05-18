@@ -48,7 +48,7 @@
       signal-desktop
       timewarrior
       tmux
-      tor-browser-bundle-bin
+      tor-browser
       wireshark
       zsa-udev-rules
 
