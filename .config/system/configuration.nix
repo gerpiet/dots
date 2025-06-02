@@ -52,21 +52,9 @@
   i18n.defaultLocale = "nl_BE.UTF-8";
 
   services = {
-    # Desktop environment  and input
-    xserver = {
-      enable = false;
-
-      # Enable the GNOME Desktop Environment.
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
-
-      # Configure keymap in X11
-      xkb = {
-        layout = "be";
-        variant = "";
-      };
-    };
-
+    # GNOME Desktop Environment.
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
     gnome.gnome-remote-desktop.enable = false; # Default false, but enabled by Gnome
 
     printing.enable = true;
