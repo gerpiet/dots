@@ -65,8 +65,6 @@
       alsa.enable = true;
       pulse.enable = true;
     };
-
-    openssh.enable = true;
   };
 
   security.rtkit.enable = true;
