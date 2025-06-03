@@ -41,37 +41,36 @@
     ];
   };
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # General configuration
-  networking.hostName = "pie";
-
-  time.timeZone = "Europe/Brussels";
+  console.keyMap = "be-latin1";
 
   i18n.defaultLocale = "nl_BE.UTF-8";
 
+  networking.hostName = "pie";
+
+  security.rtkit.enable = true;
+
   services = {
-    # GNOME Desktop Environment.
+    # GNOME Desktop Environment
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
     gnome.gnome-remote-desktop.enable = false; # Default false, but enabled by Gnome
 
-    printing.enable = true;
-
-    # Enable sound with pipewire.
+    # Sound
     pipewire = {
       enable = true;
       alsa.enable = true;
       pulse.enable = true;
     };
+
+    printing.enable = true;
   };
 
-  security.rtkit.enable = true;
+  time.timeZone = "Europe/Brussels";
 
-  # Configure console keymap
-  console.keyMap = "be-latin1";
-
+  # Program and user configuration
   programs = {
     wireshark.enable = true;
   };
@@ -95,8 +94,6 @@
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -104,5 +101,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

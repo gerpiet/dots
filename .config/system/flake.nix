@@ -21,11 +21,12 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./configuration.nix
-            ./packages.nix
-            ./virtualisation.nix
+
             ./flatpak.nix
+            ./packages.nix
             ./sh.nix
             ./syncthing.nix
+            ./virtualisation.nix
           ];
         };
       };
