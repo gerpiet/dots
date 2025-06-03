@@ -70,18 +70,13 @@
 
   time.timeZone = "Europe/Brussels";
 
-  # Program and user configuration
-  programs = {
-    wireshark.enable = true;
-  };
-
+  # User configuration
   users.users.pi = {
     isNormalUser = true;
     description = "pi";
     extraGroups = [
       "networkmanager"
       "wheel"
-      "wireshark"
     ];
     initialPassword = "pi";
   };

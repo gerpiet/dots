@@ -49,7 +49,6 @@
       timewarrior
       tmux
       tor-browser
-      wireshark
       zsa-udev-rules
 
       # Editors
