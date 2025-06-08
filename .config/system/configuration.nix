@@ -2,7 +2,7 @@
   * General/main configuration
 */
 
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -79,6 +79,16 @@
       "wheel"
     ];
     initialPassword = "pi";
+    packages = (
+      with pkgs;
+      [
+        gnomeExtensions.auto-move-windows
+        gnomeExtensions.foresight
+        gnomeExtensions.just-perfection
+        gnomeExtensions.light-style
+        gnomeExtensions.night-theme-switcher
+      ]
+    );
   };
 
   # Some programs need SUID wrappers, can be configured further or are
