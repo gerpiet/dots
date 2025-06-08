@@ -20,7 +20,6 @@
       # Open source
       bitwarden-desktop
       chromium
-      decibels # Instead of gnome-music
       file
       firefox
       fractal
@@ -79,10 +78,10 @@
       gnome-contacts
       gnome-font-viewer
       gnome-logs
-      gnome-music # Replaced by decibels
+      gnome-maps
+      gnome-music
       gnome-system-monitor # Replaced by mission-center
       gnome-tour
-      gnome-maps
       simple-scan
       snapshot
       yelp
