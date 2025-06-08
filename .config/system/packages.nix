@@ -39,6 +39,7 @@
       imhex
       impression
       libreoffice-still # Stable version
+      localsend
       mission-center # Instead of gnome-system-monitor
       papers # Instead of evince
       pika-backup
