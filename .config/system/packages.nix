@@ -1,5 +1,6 @@
 /**
-  * A list of all packages. If one packages changes, gets replaced, ..., only this file changes.
+  * Package set
+  * As there are often changes to it, packages have their own file to keep the history clean.
 */
 
 {
@@ -30,13 +31,11 @@
       gnome-extension-manager
       gnome-secrets
       gnome-software
-
       hunspell
       hunspellDicts.en_GB-large
       hunspellDicts.en_US
       hunspellDicts.fr-moderne
       hunspellDicts.nl_NL
-
       imhex
       impression
       libreoffice-still # Stable version
