@@ -19,6 +19,7 @@
 
       # Open source
       bitwarden-desktop
+      buffer
       chromium
       file
       firefox
