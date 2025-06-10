@@ -40,6 +40,7 @@
       impression
       libreoffice-still # Stable version
       localsend
+      logseq
       mission-center # Instead of gnome-system-monitor
       papers # Instead of evince
       pika-backup
