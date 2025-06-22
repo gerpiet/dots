@@ -9,7 +9,7 @@
   services.syncthing = {
     enable = true;
     user = "pi";
-    dataDir = "home/pi/Documents/syncthing";
+    dataDir = "/home/pi/Documents/syncthing";
     configDir = "/home/pi/.config/syncthing";
     overrideFolders = true;
     overrideDevices = true;
