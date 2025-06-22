@@ -29,7 +29,7 @@
       gh
       git
       gnome-extension-manager
-      gnome-secrets
+      # gnome-secrets disable temporarily as it is not used at the moment until https://nixpk.gs/pr-tracker.html?pr=418407 is ready
       gnome-software
       hunspell
       hunspellDicts.en_GB-large
