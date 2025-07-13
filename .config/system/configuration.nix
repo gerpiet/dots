@@ -70,6 +70,8 @@
 
   time.timeZone = "Europe/Brussels";
 
+  programs.nix-ld.enable = true;
+
   # User configuration
   users.users.pi = {
     isNormalUser = true;
