@@ -49,8 +49,6 @@
       shortwave
       signal-desktop
       timewarrior
-      tmux
-      tor-browser
       zsa-udev-rules
 
       # Editors
@@ -74,10 +72,10 @@
   environment.gnome.excludePackages = (
     with pkgs;
     [
-      epiphany
-      evince # Replaced by papers
-      geary
-      gnome-connections
+      epiphany # Browser
+      evince # PDF reader, replaced by papers
+      geary # Email
+      gnome-connections # Remote connections
       gnome-contacts
       gnome-font-viewer
       gnome-logs
@@ -86,8 +84,8 @@
       gnome-system-monitor # Replaced by mission-center
       gnome-tour
       simple-scan
-      snapshot
-      yelp
+      snapshot # Camera app
+      yelp # Help
     ]
   );
 
