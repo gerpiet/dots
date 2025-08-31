@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Obsidian UMontpellier Vault
+Comment=Open UMontpellier Vault in Obsidian
+Exec=xdg-open "obsidian://open?vault=um"
+Icon=obsidian
+X-Desktop-File-Install-Version=0.28

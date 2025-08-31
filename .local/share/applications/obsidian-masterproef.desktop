@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Obsidian Masterproef Vault
+Comment=Open Masterproef Vault in Obsidian
+Exec=xdg-open "obsidian://open?vault=masterproef"
+Icon=obsidian
+X-Desktop-File-Install-Version=0.28
