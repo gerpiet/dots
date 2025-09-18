@@ -10,6 +10,10 @@ let
     "dots" = "git --git-dir=/home/pi/.cfg/ --work-tree=/home/pi";
     "nix-unfree-develop" = "export NIXPKGS_ALLOW_UNFREE=1 && nix develop --impure";
     "nix-unfree-shell" = "export NIXPKGS_ALLOW_UNFREE=1 && nix shell --impure";
+    # Toggle a comment in the taskrc file that imports a light theme
+    # Thanks to https://stackoverflow.com/a/72615471 by https://stackoverflow.com/users/4179107/byrontaaka
+    "task-theme-toggle" =
+      "sed -Ei 's/^include light-256\.theme/#&/;t;s/^#(include light-256\.theme)/\\1/' /home/pi/.config/task/taskrc";
   };
   baseEnvVariables = {
     XDG_DATA_HOME = "$HOME/.local/share";
