@@ -35,10 +35,13 @@
       options = "--delete-older-than 60d";
     };
 
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    settings = {
+      download-buffer-size = 1073741824; # 1024 * 1024 * 1024 (1GB)
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
   };
 
   nixpkgs.config.allowUnfree = true;

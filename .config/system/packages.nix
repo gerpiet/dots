@@ -48,6 +48,7 @@
       protonvpn-gui
       shortwave
       signal-desktop
+      taskwarrior3
       timewarrior
       zsa-udev-rules
 
