@@ -24,16 +24,12 @@
           path = "~/Documents/syncthing/keepass";
           devices = [ "FP3" ];
         };
-        "life-photos" = {
-          path = "~/Documents/syncthing/life-photos";
+        "personal" = {
+          path = "~/Documents/syncthing/obsidian/personal";
           devices = [ "FP3" ];
         };
-        "obsidian-personal-vault" = {
-          path = "~/Documents/syncthing/obsidian-personal-vault";
-          devices = [ "FP3" ];
-        };
-        "organize" = {
-          path = "~/Documents/syncthing/organize";
+        "main" = {
+          path = "~/Documents/syncthing/obsidian/main";
           devices = [ "FP3" ];
         };
       };

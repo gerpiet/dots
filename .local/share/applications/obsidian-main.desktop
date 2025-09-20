@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Obsidian Main Vault
+Comment=Open Main Vault in Obsidian
+Exec=xdg-open "obsidian://open?vault=main"
+Icon=obsidian
+X-Desktop-File-Install-Version=0.28

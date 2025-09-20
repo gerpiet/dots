@@ -3,6 +3,6 @@ Type=Application
 Version=1.0
 Name=Obsidian Personal Vault
 Comment=Open Personal Vault in Obsidian
-Exec=xdg-open "obsidian://open?vault=obsidian-personal-vault"
+Exec=xdg-open "obsidian://open?vault=personal"
 Icon=obsidian
 X-Desktop-File-Install-Version=0.28
