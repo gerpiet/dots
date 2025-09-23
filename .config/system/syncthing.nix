@@ -32,6 +32,10 @@
           path = "~/Documents/syncthing/obsidian/main";
           devices = [ "FP3" ];
         };
+        "school" = {
+          path = "~/Documents/school";
+          devices = [ "FP3" ];
+        };
       };
     };
   };
