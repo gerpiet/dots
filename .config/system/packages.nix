@@ -22,6 +22,7 @@
       bitwarden-desktop
       buffer
       chromium
+      distrobox
       file
       firefox
       fractal
