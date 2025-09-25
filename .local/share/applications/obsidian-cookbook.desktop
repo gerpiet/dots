@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Obsidian Cookbook Vault
+Comment=Open Cookbook Vault in Obsidian
+Exec=xdg-open "obsidian://open?vault=cookbook"
+Icon=obsidian
+X-Desktop-File-Install-Version=0.28
