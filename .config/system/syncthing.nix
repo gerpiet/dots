@@ -14,7 +14,7 @@
     overrideFolders = true;
     overrideDevices = true;
     settings = {
-      devices."FP3".id = "RIS5ISR-MNPWDSD-HDJCKKM-B6N5PHA-MFM3DF5-DHO7E2T-OMLUK65-4DME3AT";
+      devices."FP3".id = "M7JF5LV-WWWNYVX-67MJ7KR-P4UPZPN-M2O55F5-OVMF5K7-YKMDGUT-2DZ5NQO";
       folders = {
         "app-backup" = {
           path = "~/Documents/syncthing/app-backup";
