@@ -16,6 +16,10 @@
     settings = {
       devices."FP3".id = "M7JF5LV-WWWNYVX-67MJ7KR-P4UPZPN-M2O55F5-OVMF5K7-YKMDGUT-2DZ5NQO";
       folders = {
+        "school" = {
+          path = "~/Documents/school";
+          devices = [ "FP3" ];
+        };
         "app-backup" = {
           path = "~/Documents/syncthing/app-backup";
           devices = [ "FP3" ];
@@ -24,16 +28,16 @@
           path = "~/Documents/syncthing/keepass";
           devices = [ "FP3" ];
         };
-        "personal" = {
-          path = "~/Documents/syncthing/obsidian/personal";
+        "cookbook" = {
+          "path" = "~/Documents/syncthing/obsidian/cookbook";
           devices = [ "FP3" ];
         };
         "main" = {
           path = "~/Documents/syncthing/obsidian/main";
           devices = [ "FP3" ];
         };
-        "school" = {
-          path = "~/Documents/school";
+        "personal" = {
+          path = "~/Documents/syncthing/obsidian/personal";
           devices = [ "FP3" ];
         };
       };
