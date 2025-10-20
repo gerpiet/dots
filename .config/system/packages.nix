@@ -49,6 +49,7 @@
       papers # Instead of evince; should be a core application in Gnome 49 https://thisweek.gnome.org/posts/2025/07/twig-207/#gnome-core-apps-and-libraries
       pika-backup
       protonvpn-gui
+      raider # aka File Shredder
       shortwave
       signal-desktop
       taskwarrior3
