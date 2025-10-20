@@ -23,6 +23,8 @@
       buffer
       chromium
       distrobox
+      distroshelf
+      eyedropper
       file
       firefox
       fractal
@@ -51,6 +53,9 @@
       signal-desktop
       taskwarrior3
       timewarrior
+      tuba
+      video-trimmer
+      warehouse # Manage all things Flatpak
       zsa-udev-rules
 
       # Editors
@@ -83,6 +88,7 @@
       gnome-logs
       gnome-maps
       gnome-music
+      gnome-software # Replaced by Bazaar (not packaged, not in config) and warehouse
       gnome-system-monitor # Replaced by mission-center
       gnome-tour
       simple-scan
